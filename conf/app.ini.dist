@@ -1,0 +1,27 @@
+[base]
+module_path = PROJECT_PATH "/module/"
+href = "http://172.16.100.6/app/"
+locale = "de_DE"
+timezone = "Europe/Berlin"
+
+[database]
+dsn = "mysql://user:password@localhost/app?charset=utf8"
+
+[log]
+file = PROJECT_PATH "/data/log/app.log"
+level = 100
+
+; see: http://framework.zend.com/manual/current/en/modules/zend.session.config.html
+[session]
+save_path = PROJECT_PATH "/data/sessions"
+name = 'app'
+cookie_lifetime = '3600'
+;cookie_path = '/'
+
+[modules]
+Config = true
+Monolog = true
+Doctrine = true
+Twig = true
+Session = true
+App = true

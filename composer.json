@@ -1,0 +1,39 @@
+{
+	"name": "lordlamer/slim-mvc-skel",
+	"description": "SlimMVC Skeleton Application",
+	"keywords": ["slim","mvc","skel"],
+	"homepage": "http://www.lordlamer.de",
+	"type": "application",
+	"license": "BSD2",
+	"authors": [
+		{
+			"name": "Frank Habermann",
+			"email": "lordlamer@lordlamer.de",
+			"homepage": "http://www.lordlamer.de"
+		}
+	],
+
+	"repositories": [
+	    {
+		"type": "composer",
+		"url": "https://packages.zendframework.com/"
+	    }
+	],
+
+	"require": {
+		"slim/slim": "2.*",
+		"slim/views": "0.*",
+		"twig/twig": "1.*",
+		"lordlamer/slim-mvc": "dev-master",
+		"symfony/console": "2.*",
+		"monolog/monolog": "1.*",
+		"doctrine/dbal": "2.*",
+		"zendframework/zend-config": "2.*",
+		"zendframework/zend-loader": "2.*",
+		"zendframework/zend-permissions-acl": "2.*",
+		"zendframework/zend-session": "2.*",
+		"zendframework/zend-navigation": "2.*",
+		"guzzlehttp/guzzle": "~5.2",
+        	"twig/extensions": "~1.1.0"
+	}
+}

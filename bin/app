@@ -1,0 +1,80 @@
+#!/usr/bin/env php
+<?php
+
+/*
+ * @author Frank Habermann <lordlamer@lordlamer.de>
+ * @date 20150610
+ */
+
+/**
+ * Console App
+ */
+
+// Define path to project directory
+defined('PROJECT_PATH')
+    || define('PROJECT_PATH', realpath(dirname(__FILE__) . '/..'));
+
+// load composer autoloader
+require PROJECT_PATH . '/vendor/autoload.php';
+
+// define required namespaces
+use Symfony\Component\Console\Application;
+use Zend\Config\Reader\Ini as ConfigReader;
+use Zend\Config\Config;
+
+// init config
+$configReader = new ConfigReader();
+$configData = $configReader->fromFile(PROJECT_PATH.'/conf/app.ini');
+$config = new Config($configData, true);
+
+// autoloader
+$loader = new \Zend\Loader\StandardAutoloader();
+
+// commands
+$commands = array();
+
+// for each module
+foreach($config->modules as $module => $enabled) {
+	// check if module is enabled
+	if(!$enabled)
+		continue;
+
+	require_once($config->base->module_path . $module . "/Module.php");
+	$m = "\\$module\\Module";
+	$m = new $m;
+
+	// autoloader
+	if(method_exists($m, 'getAutoloaderConfig')) {
+		$cfg = $m->getAutoloaderConfig();
+
+		// register module namespace
+		foreach($cfg as $key => $value) {
+			$loader->registerNamespace($key,  $value);
+		}
+	}
+
+	// load console commands
+	if(method_exists($m, 'getConsoleConfig')) {
+		$cfg = $m->getConsoleConfig();
+
+		// merge navigation recursiv
+		$commands = array_merge_recursive($commands, $cfg);
+	}
+}
+
+// register namespaces
+$loader->register();
+
+// init console app
+$app = new Application();
+
+// read commands
+foreach($commands as $keySection => $section) {
+	foreach($section as $key => $value) {
+		// register command
+		$app->add(new $value);
+	}
+}
+
+// run app
+$app->run();
